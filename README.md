@@ -9,4 +9,4 @@ Made for POC purposes
  3. Scalable
 
 ## High Level Diagram
-![High level Architecture Diagram](https://lh4.googleusercontent.com/8e3JFohANGNDEdBwRtA31-_tn-eqB8j-yS9xOxTrqeTmlOJtSpmY-8B9HMYEVXCU8o-lFnkl0cVSLK-LPuw=w1920-h989-rw)
+![High level Architecture Diagram](https://i.imgur.com/1a9Id0R.png)
