@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 from kafka import TopicPartition
 import json
+from ..utils.schema_validators import validate_kafka_messsage
 
 topic = 'test'
 hostname = 'kafka'
