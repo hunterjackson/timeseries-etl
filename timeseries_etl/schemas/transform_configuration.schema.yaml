@@ -1,0 +1,62 @@
+$id: http://example.com/example.json
+type: object
+definitions: {}
+$schema: http://json-schema.org/draft-06/schema#
+properties:
+  from_topic:
+    $id: /properties/from_topic
+    type: string
+    title: The From_topic Schema
+    description: The kafkas topic this tranform module reads from
+    default: ''
+    examples:
+    - raw
+    enum:
+    - raw
+    - transformed
+  to_topic:
+    $id: /properties/to_topic
+    type: string
+    title: The To_topic Schema
+    description: Topic that this module will submit it's messages to after transformation
+    default: ''
+    examples:
+    - transformed
+    enum:
+    - raw
+    - transformed
+  grouper:
+    $id: /properties/grouper
+    type: object
+    minProperties: 1
+    maxProperties: 1
+    properties:
+      function:
+        $id: /properties/grouper/properties/function
+        type: string
+        title: The Function Schema
+        description: The name of the grouper function is assigned here, settings for
+          the function go in paralell to this
+        default: ''
+        examples:
+        - each_timestamp
+    required:
+    - function
+  manipulation:
+    $id: /properties/manipulation
+    title: manipulation schema
+    type: array
+    description: list of manipulation function to be performed on the pyspark data frame with option described in an array
+    examples:
+    - [pivot: {axis: [1, 2]}, dropna: {}]
+  aggregation:
+    $id: /properties/aggregation
+    type: object
+    title: aggregation schema
+    description: 'column: aggregation_function type list to designate which function will be used for each column on aggregation, if column not list the function that will be use is last'
+    examples:
+    - {column_1: avg, column_2: last}
+required:
+- from_topic
+- to_topic
+- grouper
