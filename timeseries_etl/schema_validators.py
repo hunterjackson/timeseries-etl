@@ -7,6 +7,7 @@ import yaml
 resource_package = __name__
 kafka_msg_schema_stream = pkg_resources.resource_stream(resource_package, '/'.join(('schemas', 'kafka-message.schema.json')))
 kafka_msg_schema = json.load(kafka_msg_schema_stream)
+kafka_msg_schema_stream.close()
 
 
 def validate_kafka_messsage(msg, schema=kafka_msg_schema):
