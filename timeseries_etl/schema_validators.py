@@ -3,7 +3,7 @@ import json
 import pkg_resources
 
 resource_package = __name__
-kafka_msg_schema_stream = pkg_resources.resource_stream(resource_package, '/'.join(('..', 'schemas', 'kafka-message.schema.json')))
+kafka_msg_schema_stream = pkg_resources.resource_stream(resource_package, '/'.join(('schemas', 'kafka-message.schema.json')))
 kafka_msg_schema = json.load(kafka_msg_schema_stream)
 
 
