@@ -14,7 +14,7 @@ class ValidateKafkaMessageTest(unittest.TestCase):
                     'field1': {'value': 1, 'type': 'int'},
                     'field2': {'value': 5.8, 'type': 'float'},
                     'field3': {'value': 'test', 'type': 'str'},
-                    'field4': {'value': 'test', 'type': 'datetime'}
+                    'field4': {'value': '2017-01-01T00:00:00Z', 'type': 'datetime'}
                     }
 
     def test_correct_schema_imported(self):
@@ -76,8 +76,36 @@ class ValidateKafkaMessageTest(unittest.TestCase):
         with self.assertRaises(ValidationError, msg='No fields in message and still passed'):
             validate_kafka_messsage(msg)
 
+    def test_kafka_message_field_types(self):
+
+        # int process as str
+        msg = deepcopy(self.base_message)
+        msg['field1']['type'] = 'str'
+        with self.assertRaises(ValueError):
+            validate_kafka_messsage(msg)
+
+        # str process at int
+        msg = deepcopy(self.base_message)
+        msg['field3']['type'] = 'int'
+        with self.assertRaises(ValueError):
+            validate_kafka_messsage(msg)
+
+        # str process as float
+        msg['field3']['type'] = 'float'
+        with self.assertRaises(ValueError):
+            validate_kafka_messsage(msg)
+
+        # date process as int
+        msg['field4']['type'] = 'int'
+        with self.assertRaises(ValueError):
+            validate_kafka_messsage(msg)
+
+        # date process as str should pass
+        msg = deepcopy(self.base_message)
+        msg['field4']['type'] = 'str'
+        self.assertTrue(validate_kafka_messsage(msg))
+
 
 if __name__ == '__main__':
-
     unittest.main()
 

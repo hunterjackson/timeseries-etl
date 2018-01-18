@@ -2,6 +2,7 @@ import jsonschema
 import json
 import pkg_resources
 import yaml
+from timeseries_etl.utils import field_type_check
 
 # loading in all of the kafka schema here to avoid constantly reloading it
 resource_package = __name__
@@ -18,6 +19,14 @@ def validate_kafka_messsage(msg, schema=kafka_msg_schema):
     :return: boolean
     """
     jsonschema.validate(msg, schema, format_checker=jsonschema.FormatChecker())
+
+    # validate field types
+    field_type_check(msg['timestamp'], 'datetime')
+    for key, val in msg.items():
+        if key[0] == '_' or key == 'timestamp':
+            continue
+
+        field_type_check(val['value'], val['type'])
 
     return True
 
