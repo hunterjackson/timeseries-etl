@@ -3,14 +3,13 @@
   "type": "object",
   "definitions": {},
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "minProperties": 2,
+  "minProperties": 1,
   "properties": {
     "timestamp": {
       "$id": "/properties/timestamp",
       "type": "string",
       "title": "The Timestamp Schema",
       "description": "An explanation about the purpose of this instance.",
-      "default": "",
       "examples": [
         "2012-04-23T18:25:43.511Z"
       ]
@@ -27,11 +26,12 @@
       ],
       "enum": [
         "transport",
-	"instruction"
+        "instruction"
       ]
     }
   },
   "required": [
-    "timestamp"
+    "timestamp",
+    "_document_type"
   ]
 }
