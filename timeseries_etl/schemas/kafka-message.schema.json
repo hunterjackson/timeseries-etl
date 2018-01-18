@@ -8,6 +8,7 @@
     "timestamp": {
       "$id": "/properties/timestamp",
       "type": "string",
+      "format": "date-time",
       "title": "The Timestamp Schema",
       "description": "An explanation about the purpose of this instance.",
       "examples": [

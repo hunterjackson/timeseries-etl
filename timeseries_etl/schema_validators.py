@@ -14,6 +14,6 @@ def validate_kafka_messsage(msg, schema=kafka_msg_schema):
     :param schema: schema to validate against
     :return:
     """
-    jsonschema.validate(msg, schema)
+    jsonschema.validate(msg, schema, format_checker=jsonschema.FormatChecker())
 
     return True
