@@ -1,6 +1,8 @@
 import unittest
 from datetime import datetime
+from timeseries_etl.utils import read_transport_message
 from timeseries_etl.utils import field_type_check
+from jsonschema.exceptions import ValidationError
 
 
 class FieldTypeCheckTest(unittest.TestCase):
@@ -77,6 +79,78 @@ class FieldTypeCheckTest(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             field_type_check('1', 'bool')
+
+
+class ReadTransportMessageTest(unittest.TestCase):
+    base_message = '''{"timestamp": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                    "_document_type": "transport",
+                    "field1": {"value": 1, "type": "int"},
+                    "field2": {"value": 5.8, "type": "float"},
+                    "field3": {"value": "test", "type": "str"},
+                    "field4": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                    "field5": {"value": true, "type": "bool"}
+                    }'''
+
+    base_read_message = {"timestamp": {"value": datetime(2017, 1, 1, 0, 0, 0), "type": "datetime"},
+                    "_document_type": "transport",
+                    "field1": {"value": 1, "type": "int"},
+                    "field2": {"value": 5.8, "type": "float"},
+                    "field3": {"value": "test", "type": "str"},
+                    "field4": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                    "field5": {"value": True, "type": "bool"}
+                    }
+
+    def test_type_return(self):
+        self.assertEqual(dict, type(read_transport_message(self.base_message)))
+
+    def test_basic_message(self):
+        # test timestamp and int
+        msg_in = '''{"timestamp": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                    "_document_type": "transport",
+                    "field1": {"value": 1, "type": "int"}}'''
+        msg_out = {k: v for k, v in self.base_read_message.items() if k in ('_document_type', 'timestamp', 'field1')}
+
+        self.assertEqual(read_transport_message(msg_in, validate_schema=False), msg_out)
+
+        # test float
+        msg_in = '''{"timestamp": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                            "_document_type": "transport",
+                            "field2": {"value": 5.8, "type": "float"}}'''
+        msg_out = {k: v for k, v in self.base_read_message.items() if k in ('_document_type', 'timestamp', 'field2')}
+
+        self.assertEqual(read_transport_message(msg_in, validate_schema=False), msg_out)
+
+        # test string
+        msg_in = '''{"timestamp": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                                    "_document_type": "transport",
+                                    "field3": {"value": "test", "type": "str"}}'''
+        msg_out = {k: v for k, v in self.base_read_message.items() if k in ('_document_type', 'timestamp', 'field3')}
+
+        self.assertEqual(read_transport_message(msg_in, validate_schema=False), msg_out)
+
+        # test bool
+
+        # test string
+        msg_in = '''{"timestamp": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                                    "_document_type": "transport",
+                                    "field5": {"value": true, "type": "bool"}}'''
+        msg_out = {k: v for k, v in self.base_read_message.items() if k in ('_document_type', 'timestamp', 'field5')}
+
+        self.assertEqual(read_transport_message(msg_in, validate_schema=False), msg_out)
+
+    def test_schema_validation(self):
+        msg_in = '''{"timestamp": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                                    "_document_type": "transport",
+                                    "field5": {"value": true}}'''
+        with self.assertRaises(ValidationError, msg='Test for Schema Validation'):
+            read_transport_message(msg_in, validate_schema=True)
+
+        msg_in = '''{"timestamp": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                                            "_document_type": "transport",
+                                            "field5": {"value": true, "type": "int"}}'''
+        with self.assertRaises(TypeError, msg='Test for type validation'):
+            read_transport_message(msg_in, validate_schema=True)
+
 
 if __name__ == '__main__':
     unittest.main()

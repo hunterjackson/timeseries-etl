@@ -11,7 +11,7 @@ kafka_msg_schema = json.load(kafka_msg_schema_stream)
 kafka_msg_schema_stream.close()
 
 
-def validate_kafka_messsage(msg, schema=kafka_msg_schema):
+def validate_kafka_messsage(msg: dict, schema=kafka_msg_schema):
     """
 
     :param msg: loaded json message to validate
