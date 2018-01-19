@@ -33,8 +33,6 @@ properties:
   grouper:
     $id: /properties/grouper
     type: object
-    minProperties: 1
-    maxProperties: 1
     properties:
       function:
         $id: /properties/grouper/properties/function

@@ -40,6 +40,7 @@ def validate_transform_config(msg):
     rel_path_to_schema = '/'.join(('schemas', 'transform_configuration.schema.yaml'))
     transform_config_stream = pkg_resources.resource_stream(resource_package, rel_path_to_schema)
     transform_config_schema = yaml.load(transform_config_stream)
+    transform_config_stream.close()
 
     jsonschema.validate(msg, transform_config_schema)
 

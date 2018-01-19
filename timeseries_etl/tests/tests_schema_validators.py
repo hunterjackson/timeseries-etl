@@ -4,6 +4,7 @@ import json
 from copy import deepcopy
 from timeseries_etl.schema_validators import validate_kafka_messsage
 from timeseries_etl.schema_validators import kafka_msg_schema
+from timeseries_etl.schema_validators import validate_transform_config
 from jsonschema.exceptions import ValidationError
 
 
@@ -111,6 +112,19 @@ class ValidateKafkaMessageTest(unittest.TestCase):
         msg['field5']['type'] = 'str'
         with self.assertRaises(TypeError):
             validate_kafka_messsage(msg)
+
+
+class ValidateTransformConfigTest(unittest.TestCase):
+    base_message = {'from_topic': 'raw',
+                    'to_topic': 'transformed',
+                    'filter': {'state': {'value': 'UP'}},
+                    'grouper': {'function': 'bytime', 'setting1': 'yes'},
+                    'manipulation': [{'pivot': {'axis': [1, 2]}}, {'dropna': []}],
+                    'aggregation': {'column_1': 'last', 'column_2': 'avg'}}
+
+    def test_validate_transform_config(self):
+        self.assertTrue(validate_transform_config(self.base_message))
+
 
 if __name__ == '__main__':
     unittest.main()
