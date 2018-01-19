@@ -81,23 +81,23 @@ class ValidateKafkaMessageTest(unittest.TestCase):
         # int process as str
         msg = deepcopy(self.base_message)
         msg['field1']['type'] = 'str'
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             validate_kafka_messsage(msg)
 
         # str process at int
         msg = deepcopy(self.base_message)
         msg['field3']['type'] = 'int'
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             validate_kafka_messsage(msg)
 
         # str process as float
         msg['field3']['type'] = 'float'
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             validate_kafka_messsage(msg)
 
         # date process as int
         msg['field4']['type'] = 'int'
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             validate_kafka_messsage(msg)
 
         # date process as str should pass
