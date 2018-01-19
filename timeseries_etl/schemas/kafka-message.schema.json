@@ -3,7 +3,7 @@
   "type": "object",
   "definitions": {},
   "$schema": "http://json-schema.org/draft-06/schema#",
-  "minProperties": 1,
+  "minProperties": 3,
   "properties": {
     "timestamp": {
       "$id": "/properties/timestamp",
@@ -20,7 +20,6 @@
       "type": "string",
       "title": "The _document_type Schema",
       "description": "An explanation about the purpose of this instance.",
-      "default": "transport",
       "examples": [
         "transport",
         "instruction"
@@ -30,6 +29,26 @@
         "instruction"
       ]
     }
+  },
+  "patternProperties": {
+    "^((?!timestamp|_.*).)*$": {
+      "type": "object",
+      "title": "Fields",
+      "description": "The fields containing values and data types",
+      "required": ["value", "type"],
+      "properties": {
+        "value": {
+          "title": "value of field"
+        },
+        "type": {
+          "title": "data type",
+          "description": "Python data types + datetime",
+          "type": "string",
+          "enum": ["str", "int", "float", "datetime"]
+        }
+      }
+    }
+
   },
   "required": [
     "timestamp",
