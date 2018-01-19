@@ -44,7 +44,7 @@
           "title": "data type",
           "description": "Python data types + datetime",
           "type": "string",
-          "enum": ["str", "int", "float", "datetime"]
+          "enum": ["str", "int", "float", "bool",  "datetime"]
         }
       }
     }

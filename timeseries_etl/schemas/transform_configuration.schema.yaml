@@ -8,7 +8,6 @@ properties:
     type: string
     title: The From_topic Schema
     description: The kafkas topic this tranform module reads from
-    default: ''
     examples:
     - raw
     enum:
@@ -19,12 +18,18 @@ properties:
     type: string
     title: The To_topic Schema
     description: Topic that this module will submit it's messages to after transformation
-    default: ''
     examples:
     - transformed
     enum:
     - raw
     - transformed
+  filter:
+    $id: /properties/filter
+    type: object
+    title: Filter for Topic Messages
+    description: json matching filter for kafka topic messages
+    examples:
+    - {state: {value: true}} # matches only messages
   grouper:
     $id: /properties/grouper
     type: object
@@ -60,3 +65,4 @@ required:
 - from_topic
 - to_topic
 - grouper
+- filter
