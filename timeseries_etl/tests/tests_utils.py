@@ -1,8 +1,11 @@
 import unittest
+import json
 from datetime import datetime
 from timeseries_etl.utils import read_transport_message
 from timeseries_etl.utils import field_type_check
+from timeseries_etl.utils import to_transport_message
 from jsonschema.exceptions import ValidationError
+from copy import deepcopy
 
 
 class FieldTypeCheckTest(unittest.TestCase):
@@ -96,12 +99,12 @@ class ReadTransportMessageTest(unittest.TestCase):
                     "field1": {"value": 1, "type": "int"},
                     "field2": {"value": 5.8, "type": "float"},
                     "field3": {"value": "test", "type": "str"},
-                    "field4": {"value": "2017-01-01T00:00:00Z", "type": "datetime"},
+                    "field4": {"value": datetime(2017, 1, 1, 0, 0, 0), "type": "datetime"},
                     "field5": {"value": True, "type": "bool"}
                     }
 
     def test_type_return(self):
-        self.assertEqual(dict, type(read_transport_message(self.base_message)))
+        self.assertIs(dict, type(read_transport_message(self.base_message)))
 
     def test_basic_message(self):
         # test timestamp and int
@@ -150,6 +153,37 @@ class ReadTransportMessageTest(unittest.TestCase):
                                             "field5": {"value": true, "type": "int"}}'''
         with self.assertRaises(TypeError, msg='Test for type validation'):
             read_transport_message(msg_in, validate_schema=True)
+
+
+class ToTransportMessageTest(unittest.TestCase):
+    base_message = {"timestamp": {"value": datetime(2017, 1, 1, 0, 0, 0), "type": "datetime"},
+                    "_document_type": "transport",
+                    "field1": {"value": 1, "type": "int"},
+                    "field2": {"value": 5.8, "type": "float"},
+                    "field3": {"value": "test", "type": "str"},
+                    "field4": {"value": datetime(2017, 1, 1, 0, 0, 0), "type": "datetime"},
+                    "field5": {"value": True, "type": "bool"}}
+
+    def test_type_check(self):
+        msg_in = deepcopy(self.base_message)
+        self.assertIs(str, type(to_transport_message(msg_in, validate_schema=False)))
+
+    def test_datetime_transform(self):
+        msg_in = deepcopy(self.base_message)
+        msg_out = json.loads(to_transport_message(msg_in, validate_schema=False))
+        self.assertEqual(self.base_message['timestamp']['value'].isoformat(), msg_out['timestamp']['value'])
+
+    def test_schema_validation(self):
+
+        with self.assertRaises(ValidationError):
+            msg_in = deepcopy(self.base_message)
+            del msg_in['timestamp']
+            to_transport_message(msg_in, validate_schema=True)
+
+        with self.assertRaises(TypeError):
+            msg_in = deepcopy(self.base_message)
+            msg_in['timestamp']['type'] = 'int'
+            to_transport_message(msg_in, validate_schema=True)
 
 
 if __name__ == '__main__':
