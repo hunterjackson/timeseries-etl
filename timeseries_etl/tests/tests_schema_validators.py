@@ -10,7 +10,7 @@ from jsonschema.exceptions import ValidationError
 
 class ValidateKafkaMessageTest(unittest.TestCase):
 
-    base_message = {'timestamp': '2017-01-01T00:00:00Z',
+    base_message = {'timestamp': {'value': '2017-01-01T00:00:00Z', 'type': 'datetime'},
                     '_document_type': 'transport',
                     'field1': {'value': 1, 'type': 'int'},
                     'field2': {'value': 5.8, 'type': 'float'},
@@ -29,18 +29,6 @@ class ValidateKafkaMessageTest(unittest.TestCase):
         schema = json.load(schema_stream)
         schema_stream.close()
         self.assertEqual(kafka_msg_schema, schema)
-
-    def test_kafka_message_timestamp(self):
-        """
-        Exercise the different methods of inserting a timestamp
-        :return:
-        """
-        msg = deepcopy(self.base_message)
-        self.assertTrue(validate_kafka_messsage(msg), msg='Basic valid transport message returning as invalid')
-
-        msg['timestamp'] = 'junk'
-        with self.assertRaises(ValidationError):
-            validate_kafka_messsage(msg)
 
     def test_kafka_message_doc_type(self):
         """
@@ -110,6 +98,12 @@ class ValidateKafkaMessageTest(unittest.TestCase):
         # bool pass as str
         msg = deepcopy(self.base_message)
         msg['field5']['type'] = 'str'
+        with self.assertRaises(TypeError):
+            validate_kafka_messsage(msg)
+
+        # invalid datetime string as datetime
+        msg = deepcopy(self.base_message)
+        msg['timestamp']['value'] = 'definitely not a timestamp'
         with self.assertRaises(TypeError):
             validate_kafka_messsage(msg)
 

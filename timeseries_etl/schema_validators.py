@@ -21,9 +21,8 @@ def validate_kafka_messsage(msg, schema=kafka_msg_schema):
     jsonschema.validate(msg, schema, format_checker=jsonschema.FormatChecker())
 
     # validate field types
-    field_type_check(msg['timestamp'], 'datetime')
     for key, val in msg.items():
-        if key[0] == '_' or key == 'timestamp':
+        if key[0] == '_':
             continue
 
         field_type_check(val['value'], val['type'])
