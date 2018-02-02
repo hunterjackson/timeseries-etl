@@ -5,6 +5,8 @@ from copy import deepcopy
 from timeseries_etl.schema_validators import validate_kafka_messsage
 from timeseries_etl.schema_validators import kafka_msg_schema
 from timeseries_etl.schema_validators import validate_transform_config
+from timeseries_etl.schema_validators import validate_loader_config
+
 from jsonschema.exceptions import ValidationError
 
 
@@ -120,6 +122,14 @@ class ValidateTransformConfigTest(unittest.TestCase):
         self.assertTrue(validate_transform_config(self.base_message))
 
 
+class ValidateLoaderConfigTest(unittest.TestCase):
+    base_message = {'from_topic': 'transformed',
+                    'to_source': {'name': 'local', 'directory': '/tmp/test'},
+                    'filter': {'state': {'value': 'UP'}}}
+
+    def test_validate_transform_config(self):
+        self.assertTrue(validate_loader_config(self.base_message))
+
+
 if __name__ == '__main__':
     unittest.main()
-

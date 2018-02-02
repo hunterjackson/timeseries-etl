@@ -36,11 +36,34 @@ def validate_transform_config(msg):
     :param msg: loaded yaml message to validate
     :return: boolean
     """
-    rel_path_to_schema = '/'.join(('schemas', 'transform_configuration.schema.yaml'))
-    transform_config_stream = pkg_resources.resource_stream(resource_package, rel_path_to_schema)
-    transform_config_schema = yaml.load(transform_config_stream)
-    transform_config_stream.close()
+    transform_config_schema = __load_schema('transform_configuration.schema.yaml')
 
     jsonschema.validate(msg, transform_config_schema)
 
     return True
+
+
+def validate_loader_config(msg):
+    """
+
+    :param msg: loaded yaml message to validate
+    :return: boolean
+    """
+
+    transform_config_schema = __load_schema('loader_configuration.schema.yaml')
+    jsonschema.validate(msg, transform_config_schema)
+
+    return True
+
+def __load_schema(schema_filename):
+    """
+
+    :param schema_filename: the name of the file in the schemas directory
+    :return: loaded file
+    """
+    rel_path_to_schema = '/'.join(('schemas', schema_filename))
+    transform_config_stream = pkg_resources.resource_stream(resource_package, rel_path_to_schema)
+    transform_config_schema = yaml.load(transform_config_stream)
+    transform_config_stream.close()
+
+    return transform_config_schema
