@@ -37,7 +37,6 @@ def validate_transform_config(msg):
     :return: boolean
     """
     transform_config_schema = __load_schema('transform_configuration.schema.yaml')
-
     jsonschema.validate(msg, transform_config_schema)
 
     return True
@@ -51,6 +50,14 @@ def validate_loader_config(msg):
     """
 
     transform_config_schema = __load_schema('loader_configuration.schema.yaml')
+    jsonschema.validate(msg, transform_config_schema)
+
+    return True
+
+
+def validate_extractor_config(msg):
+
+    transform_config_schema = __load_schema('extractor_configuration.schema.yaml')
     jsonschema.validate(msg, transform_config_schema)
 
     return True

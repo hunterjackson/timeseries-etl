@@ -1,0 +1,37 @@
+$id: http://example.com/example.json
+type: object
+definitions: {}
+$schema: http://json-schema.org/draft-06/schema#
+properties:
+  to_topic:
+    $id: /properties/to_topic
+    type: string
+    title: The To_topic Schema
+    description: Topic that this module will submit it's messages to after extraction
+    examples:
+    - transformed
+    enum:
+    - raw
+    - transformed
+  from_source:
+    $id: /properties/from_source
+    type: object
+    description: the source and all connection information needed
+    properties:
+      name:
+        type: string
+        description: the name of the source type the extractor to will get data from
+        examples:
+        - local
+    required:
+    - name
+  filter:
+    $id: /properties/filter
+    type: object
+    title: Filter for Topic Messages
+    description: json matching filter for documents to submit to kafka topic
+    examples:
+    - {state: {value: true}} # matches only messages
+required:
+- from_topic
+- from_source
