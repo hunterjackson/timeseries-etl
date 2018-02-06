@@ -5,6 +5,7 @@ from string import digits
 from random import randint
 from sys import maxsize
 from datetime import datetime
+from time import sleep
 from timeseries_etl.schema_validators import validate_kafka_messsage
 
 
@@ -31,6 +32,7 @@ if __name__ == '__main__':
     parser.add_argument('--width', default=3, type=int, help='Number of values in in each record')
     parser.add_argument('--count', default=10, type=int, help='Number of records to submit')
     parser.add_argument('--validate', action='store_true', help='validate each record against schema')
+    parser.add_argument('--sleepseconds', default=0, type=int, help='The seconds between each record post')
 
     args = parser.parse_args()
     producer = KafkaProducer(bootstrap_servers='kafka', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
@@ -46,5 +48,6 @@ if __name__ == '__main__':
         if args.validate:
             validate_kafka_messsage(record)  # raises error if not a valid message, here mostly for testing
         producer.send(topic, record)
+        sleep(args.sleepseconds)
 
     producer.flush()  # wait for messages to send, does not confirm message received
