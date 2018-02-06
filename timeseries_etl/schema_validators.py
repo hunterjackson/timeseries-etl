@@ -24,8 +24,11 @@ def validate_kafka_messsage(msg: dict, schema=kafka_msg_schema):
     for key, val in msg.items():
         if key[0] == '_':
             continue
-
-        field_type_check(val['value'], val['type'])
+        try:
+            field_type_check(val['value'], val['type'])
+        except Exception:
+            print('Failed to validate field types on value = {}, type = {}'.format(val['value'], val['type']))
+            raise
 
     return True
 
