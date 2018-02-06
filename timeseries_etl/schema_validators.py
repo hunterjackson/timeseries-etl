@@ -27,7 +27,7 @@ def validate_kafka_messsage(msg: dict, schema=kafka_msg_schema):
         try:
             field_type_check(val['value'], val['type'])
         except Exception:
-            print('Failed to validate field types on value = {}, type = {}'.format(val['value'], val['type']))
+            print('Failed to validate field types on value = {}, type = {}'.format(val['value'], val['type']))  # TODO change to log this
             raise
 
     return True
