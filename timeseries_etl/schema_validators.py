@@ -52,16 +52,21 @@ def validate_loader_config(msg):
     :return: boolean
     """
 
-    transform_config_schema = __load_schema('loader_configuration.schema.yaml')
-    jsonschema.validate(msg, transform_config_schema)
+    loader_config_schema = __load_schema('loader_configuration.schema.yaml')
+    jsonschema.validate(msg, loader_config_schema)
 
     return True
 
 
 def validate_extractor_config(msg):
+    """
 
-    transform_config_schema = __load_schema('extractor_configuration.schema.yaml')
-    jsonschema.validate(msg, transform_config_schema)
+    :param msg: loaded yaml message to validate
+    :return: boolean
+    """
+
+    extractor_config_schema = __load_schema('extractor_configuration.schema.yaml')
+    jsonschema.validate(msg, extractor_config_schema)
 
     return True
 
@@ -72,8 +77,8 @@ def __load_schema(schema_filename):
     :return: loaded file
     """
     rel_path_to_schema = '/'.join(('schemas', schema_filename))
-    transform_config_stream = pkg_resources.resource_stream(resource_package, rel_path_to_schema)
-    transform_config_schema = yaml.load(transform_config_stream)
-    transform_config_stream.close()
+    config_stream = pkg_resources.resource_stream(resource_package, rel_path_to_schema)
+    config_schema = yaml.load(config_stream)
+    config_stream.close()
 
-    return transform_config_schema
+    return config_schema

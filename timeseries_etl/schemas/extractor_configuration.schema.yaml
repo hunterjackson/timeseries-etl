@@ -33,5 +33,5 @@ properties:
     examples:
     - {state: {value: true}} # matches only messages
 required:
-- from_topic
+- to_topic
 - from_source

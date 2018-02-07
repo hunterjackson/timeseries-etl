@@ -134,7 +134,7 @@ class ValidateLoaderConfigTest(unittest.TestCase):
 
 
 class ValidateExtractorConfigTest(unittest.TestCase):
-    base_message = {'from_topic': 'transformed',
+    base_message = {'to_topic': 'raw',
                     'from_source': {'name': 'local', 'directory': '/tmp/test'},
                     'filter': {'state': {'value': 'UP'}}}
 
