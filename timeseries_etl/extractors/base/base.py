@@ -1,6 +1,7 @@
 import abc
-
 import yaml
+from kafka import KafkaProducer
+from timeseries_etl.utils import obj_to_json
 from timeseries_etl.schema_validators import validate_extractor_config
 
 
@@ -15,6 +16,7 @@ class BaseExtractor(abc.ABC):
         self._connected = False
         self._configurations = None
 
+        self.kafka_connection = None
         self.configurations = yaml_configuration_file
 
     @abc.abstractmethod
@@ -28,8 +30,9 @@ class BaseExtractor(abc.ABC):
     def connect(self):
         self._connected = True
 
-    def kafka_connect(self):
-        pass
+    def kafka_connect(self, hostname):
+        self.kafka_connection = KafkaProducer(bootstrap_servers=hostname,
+                                              value_serializer=obj_to_json)
 
     @property
     def configurations(self):

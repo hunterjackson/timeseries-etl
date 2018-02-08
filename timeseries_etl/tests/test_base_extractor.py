@@ -58,29 +58,21 @@ class AbstractTests(unittest.TestCase):
         with open(self.file_location, 'w') as f:
             f.write(yaml.dump(self.configurations))
 
-    def test_abstract_function(self):
+    def test_abstract_functions(self):
 
         class Inherited(BaseExtractor):
             def ingest(self):
                 pass
 
-            # def parse(self):
-            #     pass
-
         with self.assertRaises(TypeError):
             Inherited(self.file_location)
 
         class Inherited(BaseExtractor):
-            # def ingest(self):
-            #     pass
-
             def parse(self):
                 pass
 
         with self.assertRaises(TypeError):
             Inherited(self.file_location)
-
-
 
 
 if __name__ == '__main__':

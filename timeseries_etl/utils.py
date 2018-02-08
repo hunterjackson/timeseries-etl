@@ -75,3 +75,6 @@ def to_transport_message(msg: dict, validate_schema=True):
 
     return msg
 
+
+def obj_to_json(msg):
+    return json.dumps(msg).encode('utf-8')

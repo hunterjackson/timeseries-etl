@@ -3,6 +3,12 @@ type: object
 definitions: {}
 $schema: http://json-schema.org/draft-06/schema#
 properties:
+  reload_on_regen:
+    $id: /properties/reload_on_regen
+    type: boolean
+    title: Reload from Source on Regen
+    description: if an instruction message is received indicating a regen is to start. Re-load all relevant records into the topic they were extracted from.
+    default: false
   from_topic:
     $id: /properties/from_topic
     type: string
@@ -32,6 +38,11 @@ properties:
     description: json matching filter for kafka topic messages
     examples:
     - {state: {value: true}} # matches only messages
+  time_in_file:
+    $id: /properties/time_in_file
+    type: integer
+    desecription: the amount of time in seconds you want each file in the source to contain. Only valid for file storage systems
+    
 required:
 - from_topic
 - to_source
