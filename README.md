@@ -33,6 +33,7 @@ Regardless of the storage device the device will be stored as shown in the examp
 .
 
 Example:
+
 |timestamp| length | width | 
 |--|--|--|
 | 20170101T00:01:11.132 | 4 | 3 |
