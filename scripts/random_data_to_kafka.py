@@ -32,7 +32,7 @@ if __name__ == '__main__':
     parser.add_argument('--width', default=3, type=int, help='Number of values in in each record')
     parser.add_argument('--count', default=10, type=int, help='Number of records to submit')
     parser.add_argument('--validate', action='store_true', help='validate each record against schema')
-    parser.add_argument('--sleepseconds', default=0, type=int, help='The seconds between each record post')
+    parser.add_argument('--sleepseconds', default=0, type=float, help='The seconds between each record post')
 
     args = parser.parse_args()
     producer = KafkaProducer(bootstrap_servers='kafka', value_serializer=lambda v: json.dumps(v).encode('utf-8'))

@@ -2,7 +2,7 @@ from kafka import KafkaConsumer
 from kafka import TopicPartition
 import json
 
-topic = 'test'
+topic = 'raw'
 hostname = 'kafka'
 
 consumer = KafkaConsumer(# topic,  # only used in subscription mode
@@ -14,5 +14,7 @@ consumer = KafkaConsumer(# topic,  # only used in subscription mode
 # assign to all partitions of topic, now assigned instead of subscribed
 consumer.assign([TopicPartition(topic, partition) for partition in consumer.partitions_for_topic(topic)])
 
+counter = 0
 for msg in consumer:
-    print(msg)
+    counter += 1
+    print(counter, msg)
